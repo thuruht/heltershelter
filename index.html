@@ -176,8 +176,7 @@
       <div class="accordion-body">
         <p>Email: <a href="mailto:hello@heltershelter.kcmo.xyz">hello@heltershelter.kcmo.xyz</a></p>
         <p>Text: (816) 559-8789</p>
-        <form style="margin-top:1rem;" onsubmit="return disableContactForm(event);">
-
+        <form style="margin-top:1rem;" id="contactForm">
           <input type="text" placeholder="Your Name" required />
           <input type="email" placeholder="Your Email" required />
           <textarea rows="5" placeholder="Your Message" required></textarea>
@@ -212,31 +211,58 @@
   </footer>
 
   <script>
-    function toggleAccordion(header) {
-      const body = header.nextElementSibling;
-      const all = document.querySelectorAll(".accordion-body");
-      all.forEach(section => {
-        if (section !== body) section.classList.remove("open");
-      });
-      body.classList.toggle("open");
+    async function submitForm(event) {
+      event.preventDefault();
+  
+      const name = document.querySelector('input[placeholder="Your Name"]').value;
+      const email = document.querySelector('input[placeholder="Your Email"]').value;
+      const message = document.querySelector('textarea[placeholder="Your Message"]').value;
+  
+      let clientToken = localStorage.getItem('clientToken');
+  
+      // Basic client-side validation (add more as needed)
+      if (!name || !email || !message) {
+        alert('Please fill in all fields.');
+        return;
+      }
+  
+      // Loading indicator (you'll need to add a loading spinner or similar)
+      const submitButton = document.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+  
+      try {
+        const response = await fetch('https://formshelt.kcmo.xyz/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Client-Token': clientToken,
+          },
+          body: JSON.stringify({ name, email, message }),
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          if (data.token && !clientToken) {
+            localStorage.setItem('clientToken', data.token);
+          }
+          alert('Message sent successfully!');
+          document.getElementById('contactForm').reset();
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        // Reset loading indicator and button
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message';
+      }
     }
-
-    gsap.from(".gsap-title", {
-      duration: 2,
-      opacity: 0,
-      y: -30,
-      ease: "power2.out"
-    });
-
-    gsap.utils.toArray(".accordion-item").forEach((item, i) => {
-      gsap.from(item, {
-        opacity: 0,
-        y: 20,
-        delay: 0.2 + i * 0.1,
-        duration: 1,
-        ease: "power3.out"
-      });  
-    });
+  
+    document.getElementById('contactForm').addEventListener('submit', submitForm);
   </script>
   <!-- PayPal SDK -->
 <script src="https://www.paypal.com/sdk/js?client-id=BAADmKkrVES0bagQKsfZxty_ghoy9KYnyNizFdGxAiyzrMvQcFokPBrXD00z-tUGR01VpJzWtB81G2R_oo&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
@@ -245,11 +271,42 @@
     hostedButtonId: "UWAU5QR5NEEHW",
   }).render("#paypal-container-UWAU5QR5NEEHW")
 </script>
-<script>
-  function disableContactForm(e) {
-    alert("The contact form is temporarily disabled while we finish setup. Please email hello@heltershelter.kcmo.xyz or text (816) 559-8789 instead.");
-    return false;
+<script>async function submitForm(event) {
+  event.preventDefault();
+
+  const name = document.querySelector('input[placeholder="Your Name"]').value;
+  const email = document.querySelector('input[placeholder="Your Email"]').value;
+  const message = document.querySelector('textarea[placeholder="Your Message"]').value;
+
+  let clientToken = localStorage.getItem('clientToken');
+
+  try {
+    const response = await fetch('https://formshelt.kcmo.xyz/submit', { // Use the production route
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Client-Token': clientToken,
+      },
+      body: JSON.stringify({ name, email, message }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.token && !clientToken) {
+        localStorage.setItem('clientToken', data.token);
+      }
+      alert('Message sent successfully!');
+    } else {
+      alert(`Error: ${data.error}`);
+    }
+  } catch (error) {
+    console.error('Fetch error:', error);
+    alert('An error occurred. Please try again.');
   }
+}
+
+document.querySelector('form').addEventListener('submit', submitForm);
 </script>
 
 </body>
