@@ -211,6 +211,7 @@
   </footer>
 
   <script>
+    // Form submission
     async function submitForm(event) {
       event.preventDefault();
   
@@ -264,50 +265,43 @@
   
     document.getElementById('contactForm').addEventListener('submit', submitForm);
   </script>
-  <!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=BAADmKkrVES0bagQKsfZxty_ghoy9KYnyNizFdGxAiyzrMvQcFokPBrXD00z-tUGR01VpJzWtB81G2R_oo&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
 <script>
-  paypal.HostedButtons({
-    hostedButtonId: "UWAU5QR5NEEHW",
-  }).render("#paypal-container-UWAU5QR5NEEHW")
-</script>
-<script>async function submitForm(event) {
-  event.preventDefault();
-
-  const name = document.querySelector('input[placeholder="Your Name"]').value;
-  const email = document.querySelector('input[placeholder="Your Email"]').value;
-  const message = document.querySelector('textarea[placeholder="Your Message"]').value;
-
-  let clientToken = localStorage.getItem('clientToken');
-
-  try {
-    const response = await fetch('https://formshelt.kcmo.xyz/submit', { // Use the production route
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Client-Token': clientToken,
-      },
-      body: JSON.stringify({ name, email, message }),
+  // Accordion functionality
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const all = document.querySelectorAll(".accordion-body");
+    all.forEach(section => {
+      if (section !== body) section.classList.remove("open");
     });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      if (data.token && !clientToken) {
-        localStorage.setItem('clientToken', data.token);
-      }
-      alert('Message sent successfully!');
-    } else {
-      alert(`Error: ${data.error}`);
-    }
-  } catch (error) {
-    console.error('Fetch error:', error);
-    alert('An error occurred. Please try again.');
+    body.classList.toggle("open");
   }
-}
-
-document.querySelector('form').addEventListener('submit', submitForm);
 </script>
+<script>
+  // GSAP animations
+  gsap.from(".gsap-title", {
+    duration: 2,
+    opacity: 0,
+    y: -30,
+    ease: "power2.out"
+  });
 
+  gsap.utils.toArray(".accordion-item").forEach((item, i) => {
+    gsap.from(item, {
+      opacity: 0,
+      y: 20,
+      delay: 0.2 + i * 0.1,
+      duration: 1,
+      ease: "power3.out"
+    });
+  });
+</script>
+ <!-- PayPal SDK -->
+ <script src="https://www.paypal.com/sdk/js?client-id=BAADmKkrVES0bagQKsfZxty_ghoy9KYnyNizFdGxAiyzrMvQcFokPBrXD00z-tUGR01VpJzWtB81G2R_oo&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
+ <script>
+   paypal.HostedButtons({
+     hostedButtonId: "UWAU5QR5NEEHW",
+   }).render("#paypal-container-UWAU5QR5NEEHW")
+ </script>
+ 
 </body>
 </html>
