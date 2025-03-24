@@ -6,6 +6,9 @@
   <meta property="og:title" content="Helter Shelter KC - Free Tent Project" />
   <meta property="og:image" content="/helter-shelter-social.png" />
   <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Grotesk:wght@400;600&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -21,11 +24,12 @@
       align-items: center;
     }
     h1 {
-      font-family: 'Orbitron', monospace;
+      font-family: 'Boldonse', monospace;
       color: #FF3EB5;
       text-shadow: 0 0 8px #00D6FF;
       animation: pulseGlow 4s infinite alternate ease-in-out;
       font-size: 3rem;
+      text-align: center;
     }
     @keyframes pulseGlow {
       0% { text-shadow: 0 0 6px #00D6FF; }
@@ -142,12 +146,19 @@
     padding: 0 1rem;
   }
 }
+.titlel {
+color:#FF3EB5;
+  -webkit-text-stroke:1px #00d6ff;
+  text-shadow:1px 1px 1px #00d6ff, -1px 1px 1px #00d6ff, -1px -1px 1px #00d6ff, 1px -1px 1px #00d6ff; 
+  font-size: clamp(1.33rem, 0.71rem + 6.943vw, 9rem);
+}
 
   </style>
 </head>
 <body>
-  <h1 class="gsap-title">Helter Shelter KC</h1>
-  <h2>free tent project</h2>
+  <h1 class="gsap-title"> <span class="titlel">Helter Shelter
+ KC</span></h1>
+  <h3>free tent project</h3>
   <img src="./hs3.png" alt="free tent project - helter shelter - kcmo - logo">
   <p style="margin: 1rem 0; text-align: center;">Free tents, sleeping bags etc. for unhoused neighbors in KCMO.</p>
 
