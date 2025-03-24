@@ -176,7 +176,7 @@
       <div class="accordion-body">
         <p>Email: <a href="mailto:hello@heltershelter.kcmo.xyz">hello@heltershelter.kcmo.xyz</a></p>
         <p>Text: (816) 559-8789</p>
-   
+    
         <div class="map-container">
           <p>Meetup Area (appointments or announced Free Tent Days)</p>
           <iframe 
@@ -205,7 +205,18 @@
     <p>2025 Helter Shelter KC – neighbors helping neighbors</p>
   </footer>
 
-
+  
+<script>
+  // Accordion functionality
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const all = document.querySelectorAll(".accordion-body");
+    all.forEach(section => {
+      if (section !== body) section.classList.remove("open");
+    });
+    body.classList.toggle("open");
+  }
+</script>
 <script>
   // GSAP animations
   gsap.from(".gsap-title", {
