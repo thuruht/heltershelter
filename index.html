@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta property="og:title" content="Helter Shelter KC - Free Tent Project" />
-  <meta property="og:image" content="/helter-shelter-social.png" />
-  <link rel="icon" href="/favicon.png" type="image/png" />
+  <meta property="og:image" content="./hs4.png" />
+  <link rel="icon" href="./favicon.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Grotesk:wght@400;600&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script 
+  src="https://www.paypal.com/sdk/js?client-id=BAADmKkrVES0bagQKsfZxty_ghoy9KYnyNizFdGxAiyzrMvQcFokPBrXD00z-tUGR01VpJzWtB81G2R_oo&components=hosted-buttons&enable-funding=venmo&currency=USD">
+</script>
   <title>Helter Shelter KC</title>
   <style>
     body {
@@ -190,11 +193,15 @@ h2 {
         <p>You can donate securely through PayPal or Venmo. Anything recieved will be used to purchase gear, and fund transport and outreach.</p>
       
         <!-- PayPal Hosted Button -->
-        <div id="paypal-container-UWAU5QR5NEEHW" style="margin-top: 1rem;"></div>
-      </div>
+    <div id="paypal-container-H4Y8CJZL7NDNG"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "H4Y8CJZL7NDNG",
+  }).render("#paypal-container-H4Y8CJZL7NDNG")
+</script>
       
     </div>
-
+</div>
     <div class="accordion-item">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span><span class="material-icons">contact_page</span> Contact & Map</span>
@@ -262,13 +269,7 @@ h2 {
     });
   });
 </script>
- <!-- PayPal SDK -->
- <script src="https://www.paypal.com/sdk/js?client-id=BAADmKkrVES0bagQKsfZxty_ghoy9KYnyNizFdGxAiyzrMvQcFokPBrXD00z-tUGR01VpJzWtB81G2R_oo&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
- <script>
-   paypal.HostedButtons({
-     hostedButtonId: "UWAU5QR5NEEHW",
-   }).render("#paypal-container-UWAU5QR5NEEHW")
- </script>
+
  
 </body>
 </html>
