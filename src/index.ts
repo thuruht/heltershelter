@@ -1,5 +1,6 @@
 // index.ts
 
+import { Fetcher } from '@cloudflare/workers-types/experimental';
 import { Hono } from 'hono';
 
 type Bindings = {

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TentDrop Subscriptions</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://www.paypal.com/sdk/js?client-id=Adyi6FYnGh5pq8w9jdA3NxS_m-2U5wgrCdviCCfsDEDmo8plIpB94kLAiP8jnroCL-cJdt96Y3QkFERA&vault=true&intent=subscription"></script>
+    <style>
+        body { padding: 20px; text-align: center; }
+        .plan-card { max-width: 300px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Support TentDrop</h1>
+        <p>Choose a monthly subscription plan.</p>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="plan-card">
+                    <h3>$5 / mo</h3>
+                    <p>Basic Support</p>
+                    <div id="paypal-button-container-P-9R317584Y39124539NE6BBRQ"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="plan-card">
+                    <h3>$10 / mo</h3>
+                    <p>Standard Support</p>
+                    <div id="paypal-button-container-P-1NK70551GG3454605NE6BCBQ"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="plan-card">
+                    <h3>$20 / mo</h3>
+                    <p>Premium Support</p>
+                    <div id="paypal-button-container-P-93K63379Y33123632NE6BCWI"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const plans = [
+            'P-9R317584Y39124539NE6BBRQ',
+            'P-1NK70551GG3454605NE6BCBQ',
+            'P-93K63379Y33123632NE6BCWI'
+        ];
+
+        plans.forEach(planId => {
+            paypal.Buttons({
+                style: {
+                    shape: 'rect',
+                    color: 'gold',
+                    layout: 'vertical',
+                    label: 'subscribe'
+                },
+                createSubscription: function(data, actions) {
+                    return actions.subscription.create({
+                        'plan_id': planId
+                    });
+                },
+                onApprove: function(data, actions) {
+                    alert(data.subscriptionID);
+                }
+            }).render('#paypal-button-container-' + planId);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TentDrop Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { padding: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TentDrop Admin</h1>
+        
+        <!-- Login Section -->
+        <div id="login-section">
+            <div class="card p-4" style="max-width: 400px; margin: 0 auto;">
+                <h3>Login</h3>
+                <input type="text" id="username" class="form-control mb-2" placeholder="Username">
+                <input type="password" id="password" class="form-control mb-2" placeholder="Password">
+                <button class="btn btn-primary w-100" onclick="login()">Login</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="hidden">
+            <div class="d-flex justify-content-between mb-4">
+                <h3>Dashboard</h3>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <ul class="nav nav-tabs mb-3" id="adminTabs">
+                <li class="nav-item">
+                    <button class="nav-link active" onclick="showTab('products')">Products</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="showTab('orders')">Orders</button>
+                </li>
+            </ul>
+
+            <!-- Products Tab -->
+            <div id="tab-products">
+                <div class="card mb-4">
+                    <div class="card-header">Add Product</div>
+                    <div class="card-body">
+                        <form id="product-form" onsubmit="addProduct(event)">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <input type="text" name="name" class="form-control" placeholder="Product Name" required>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <input type="number" name="price" class="form-control" placeholder="Price" step="0.01" required>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <input type="number" name="stock" class="form-control" placeholder="Stock" value="100">
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <textarea name="description" class="form-control" placeholder="Description"></textarea>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <input type="file" name="image" class="form-control" accept="image/*">
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-success">Add Product</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body"></tbody>
+                </table>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="tab-orders" class="hidden">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Items</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/tdkc';
+
+        async function checkAuth() {
+            const res = await fetch(`${API_BASE}/me`);
+            const data = await res.json();
+            if (data.authenticated) {
+                showDashboard();
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            loadProducts();
+            loadOrders();
+        }
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const res = await fetch(`${API_BASE}/login`, {
+                method: 'POST',
+                body: JSON.stringify({ username, password })
+            });
+
+            if (res.ok) {
+                showDashboard();
+            } else {
+                alert('Login failed');
+            }
+        }
+
+        async function logout() {
+            await fetch(`${API_BASE}/logout`, { method: 'POST' });
+            location.reload();
+        }
+
+        // --- Products ---
+
+        async function loadProducts() {
+            const res = await fetch(`${API_BASE}/products`);
+            const products = await res.json();
+            const tbody = document.getElementById('products-table-body');
+            tbody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.image_key ? `<img src="${API_BASE}/media/${p.image_key}" width="50">` : ''}</td>
+                    <td>${p.name}</td>
+                    <td>$${p.price.toFixed(2)}</td>
+                    <td>${p.stock}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function addProduct(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const res = await fetch(`${API_BASE}/products`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok) {
+                form.reset();
+                loadProducts();
+            } else {
+                alert('Failed to add product');
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure?')) return;
+            const res = await fetch(`${API_BASE}/products/${id}`, { method: 'DELETE' });
+            if (res.ok) loadProducts();
+        }
+
+        // --- Orders ---
+
+        async function loadOrders() {
+            const res = await fetch(`${API_BASE}/orders`);
+            if (!res.ok) return; // Maybe not admin
+            const orders = await res.json();
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = orders.map(o => {
+                const items = JSON.parse(o.items || '[]');
+                const itemsList = items.map(i => `${i.quantity}x ${i.name}`).join(', ');
+                return `
+                <tr>
+                    <td><small>${o.id}</small></td>
+                    <td>${new Date(o.created_at).toLocaleDateString()}</td>
+                    <td>${o.customer_email}</td>
+                    <td>$${o.total}</td>
+                    <td>${itemsList}</td>
+                    <td><span class="badge bg-success">${o.status}</span></td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // --- Tabs ---
+        function showTab(tabName) {
+            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+            document.querySelector(`button[onclick="showTab('${tabName}')"]`).classList.add('active');
+            
+            document.getElementById('tab-products').classList.add('hidden');
+            document.getElementById('tab-orders').classList.add('hidden');
+            
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        }
+
+        // Init
+        checkAuth();
+    </script>
+</body>
+</html>

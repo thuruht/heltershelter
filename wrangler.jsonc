@@ -7,6 +7,30 @@
     "directory": "./public/",
     "binding": "ASSETS"
   },
+  "kv_namespaces": [
+    {
+      "binding": "SHOP_SESSION",
+      "id": "95e2fff05e11479a96d06f5ef9099a84"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "bucket_name": "tentdrop-shop-media",
+      "binding": "SHOP_MEDIA"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "SHOP_DB",
+      "database_name": "shop_db_tdkc",
+      "database_id": "3a3f38df-5fd9-4cb1-a3d4-2f35118dcda5"
+    }
+  ],
+  "vars": {
+    "PLAN_TWENTY": "P-93K63379Y33123632NE6BCWI",
+    "PLAN_TEN": "P-1NK70551GG3454605NE6BCBQ",
+    "PLAN_FIVE": "P-9R317584Y39124539NE6BBRQ"
+  },
   "observability": {
     "enabled": true
   },
