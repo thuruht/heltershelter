@@ -1,0 +1,14 @@
+{
+  "name": "tentdrop",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-02-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public/",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "account_id": "829921384c97e0dbbb34430e307d6b52"
+}
