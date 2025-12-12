@@ -1,3 +1,5 @@
+// index.ts
+
 import { Hono } from 'hono';
 
 type Bindings = {

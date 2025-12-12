@@ -1,5 +1,7 @@
+/* styles.css */
+
 body {
-  background: #1E1E1EFF;
+  background: url('bgbg.png') repeat 0 0 fixed, radial-gradient(circle at center, #000000 0%, #FF3EB514 50%, #1E1E1E 100%) fixed;
   color: #D6A8FFFF;
   font-family: 'Space Grotesk', sans-serif;
   padding: 2rem;

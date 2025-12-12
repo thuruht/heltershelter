@@ -1,3 +1,5 @@
+// scripts.js
+
 document.addEventListener('DOMContentLoaded', () => {
   initLogoSwap();
   initAccordion();
